@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ playlist['Title'] }}{% endblock %}
+
+{% block content %}
+  <h1>{{ playlist['Title'] }}</h1>
+  <p>{{ playlist['Description'] }}</p>
+  <div class= playlist-songs>
+    <h2>Songs in this playlist:</h2>
+    <ul class="playlist-song-list">
+      {% for song in songs %}
+      <li class="playlist-song-item">
+        <div class="playlist-song-title">{{ song['Title'] }}</div>
+        <div class="playlist-song-details">
+          <div class="playlist-song-artist">({{ song['ArtistName'] }})</div>
+          <!-- <div class="playlist-song-album">{{ song['AlbumName'] }}</div> -->
+          <div class="playlist-song-duration">{{ song['Duration'] }}</div>
+        </div>
+        <div class="playlist-song-remove">
+          <form action="/playlist/{{ playlist['PlaylistID'] }}/song/{{ song['SongID'] }}/remove" method="post">
+  
+            <input type="hidden" name="song_id" value="{{ song['SongID'] }}">
+            <button type="submit" class="btn btn-danger">Remove</button>
+          </form>
+        </div>
+      </li>
+    {% endfor %}
+    </ul>
+  </div>
+
+{% endblock %}

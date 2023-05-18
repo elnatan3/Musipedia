@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{% block title %}Genres{% endblock %}
+
+{% block content %}
+  <h1 style="margin-top: 90px;">Genres</h1>
+  <form style="margin-left: 100px; margin-right: 100px;" action="/search">
+    <label for="genre" style="font-size: 24px;">Search for genre:</label>
+    <select name="genre" id="genre">
+      <option style="font-size: 20px;" value="">--Select a genre--</option>
+      {% for genre in genres %}
+        <option value="{{ genre['GenreID'] }}"> {{ genre['Name'] }}</option>
+      {% endfor %}
+    </select>
+    <button type="submit">Search</button>
+  </form>
+<div class="genre-container">
+    {% for genre in genres %}
+    <div class="genre genre-bg {% if genre['Name'] == 'Pop' %}genre-pop{% elif genre['Name'] == 'R&B' %}genre-rnb{% elif genre['Name'] == 'Rock' %}genre-rock{% elif genre['Name'] == 'Hip hop' %}genre-hiphop{% elif genre['Name'] == 'Country' %}genre-country{% elif genre['Name'] == 'Electronic' %}genre-electronic{% elif genre['Name'] == 'Classical' %}genre-classical{% elif genre['Name'] == 'Jazz' %}genre-jazz{% elif genre['Name'] == 'Reggae' %}genre-reggae{% endif %}">
+      <h2>{{ genre['Name'] }}</h2>
+      <p>{{ genre['Description'] }}</p>
+      <form action="/genre/{{ genre['GenreID'] }}/song">
+          <button type="submit" class="btn-zoom">View Songs</button>
+        </form>
+    </div>
+  {% endfor %}
+</div>
+{% endblock %}

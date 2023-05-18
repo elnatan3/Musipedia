@@ -1,0 +1,71 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <h1 style="margin-top: 90px;">Songs</h1>
+  <form style>
+    <input type="text" id="search" placeholder="Search songs...">
+  </form>
+  <!-- <div class="explore-btn">
+    <a style="text-decoration: none;" href="{{ url_for('beat') }}" class="btn-for-explore">Beats</a>
+  </div> -->
+  <div class="card-container" id="song-list">
+    {% for song in songs %}
+      <div class="card" data-title="{{ song['Title'] }}">
+        <div class="card-title">{{ song['Title'] }} ({{ song['ArtistName'] }})</div>
+        <div class="card-title">{{ song['Year'] }}</div>
+        <div class="card-action">
+        <a href="{{ url_for('view_playlists_for_song', song_id=song['SongID']) }}" title="View playlists">👀</a>
+        <a href="{{ url_for('add_song_to_playlist', song_id=song['SongID']) }}" title="Add to new playlist">＋</a>
+        <a href="{{ url_for('like_song', song_id=song['SongID']) }}" title="Favorite" class="like-button">❤️</a>
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+
+
+
+  <script>
+    
+      // Get the search input and song list
+    const search = document.getElementById('search');
+    const songList = document.getElementById('song-list');
+    let searchTerm = '';
+    
+    // Add event listener to search input
+    search.addEventListener('keyup', (event) => {
+      if (event.key === 'Backspace') {
+        searchTerm = searchTerm.substring(0, searchTerm.length - 1);
+      } else {
+        searchTerm = search.value.toLowerCase();
+      }
+    
+      // Loop through song list and hide/show songs based on search term
+      let songFound = false;
+      for (let i = 0; i < songList.children.length; i++) {
+        const songTitle = songList.children[i].dataset.title.toLowerCase();
+        if (songTitle.includes(searchTerm)) {
+          songList.children[i].style.display = 'block';
+          songFound = true;
+        } else {
+          songList.children[i].style.display = 'none';
+        }
+      }
+    
+      // If no songs found, display message
+      if (!songFound) {
+        songList.innerHTML = '<p>No songs found with that name.</p>';
+      }
+    });
+    
+    
+                              </script>
+    
+      <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+      <script>
+          $(document).ready(function() {
+            $('.card-action .like-button').click(function() {
+              $(this).closest('.card').addClass('liked');
+            });
+          });
+      </script>
+{% endblock %}

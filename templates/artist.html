@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container-fluid">
+  <div class="row justify-content-center">
+    <div class="col-12 col-md-8 col-lg-6">
+      <h1 class="text-center mb-5">Artists</h1>
+      <form class="mb-5">
+        <div class="input-group">
+          <input type="text" class="form-control" placeholder="Search artists..." id="searchInput">
+        </div>
+      </form>
+      <div class="row artist-row">
+  {% for artist in artists %}
+  <div class="col-12 col-md-6 col-lg-4 mb-4 artist-card" data-artist="{{ artist['Name'] }}">
+    <div class="card mb-4 border-dark">
+      <div class="card-body">
+        <h4 class="card-title">{{ artist['Name'] }}</h4>
+        <h6 class="card-subtitle mb-3">{{ artist['Nationality'] }}</h6>
+        <p class="card-text">{{ artist['Biography'] }}</p>
+      </div>
+    </div>
+  </div>
+  {% endfor %}
+</div>
+    </div>
+  </div>
+</div>
+
+<script>
+  // Get the input field and the cards
+  var input = document.getElementById("searchInput");
+  var cards = document.querySelectorAll(".artist-card");
+
+  // Add an event listener to the input field
+  input.addEventListener("input", function() {
+    // Get the value of the input field
+    var inputValue = input.value.toUpperCase();
+
+    // Loop through the cards and hide/show them based on the input value
+    cards.forEach(function(card) {
+      var artistName = card.getAttribute("data-artist").toUpperCase();
+      if (artistName.indexOf(inputValue) > -1) {
+        card.style.display = "";
+      } else {
+        card.style.display = "none";
+      }
+    });
+  });
+</script>
+{% endblock %}

@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h1>Edit Playlist</h1>
+    <form style="margin-left: 100px; margin-right: 100px;" method="post">
+        <label for="title">Title:</label>
+        <br>
+        <input type="text" id="title" name="title" value="{{ playlist['Title'] }}" required>
+        <br>
+        <label for="description">Description:</label>
+        <br>
+        <textarea id="description" name="description" required>{{ playlist['Description'] }}</textarea>
+        <br>
+        <button type="submit">Update Playlist</button>
+    </form>
+    <hr>
+    <form style="margin-left: 100px; margin-right: 100px;" action="{{ url_for('delete_playlist',id=playlist['PlaylistID']) }}" method="POST">
+            <input type="submit" value="Delete Playlist"
+                    onclick="return confirm('Are you sure you want to delete this playlist?')">
+    </form>
+  
+{% endblock %}

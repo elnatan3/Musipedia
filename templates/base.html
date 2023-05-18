@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %} {% endblock %} - FlaskApp</title>
+  <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/style.css') }}">
+    
+</head>
+  <div class="body-page-back">
+    <div class="body-page">
+  <body>
+      <nav>
+        <a href="{{ url_for('index') }}">HOME</a>
+        <a href="{{ url_for('getSong') }}">SONGS</a>
+        <a href="{{ url_for('getArtist') }}">ARTISTS</a>
+        <a href="{{ url_for('getAlbum') }}">ALBUMS</a>
+        <a href="{{ url_for('getPlaylist') }}">PLAYLISTS</a>
+        <a href="{{ url_for('getGenre') }}">GENRES</a>
+        <div class="login-logout">
+        {% if session['user_id'] %}
+          <form action="{{ url_for('logout') }}" method="post">
+            <button type="submit" class="logout-button">Log Out</button>
+          </form>
+        {% else %}
+          <a href="{{ url_for('existing_user') }}" class="login-button">Login</a>
+        {% endif %}
+      </div>
+      </nav>
+      <hr>
+      <div class="content container">
+          {% for message in get_flashed_messages() %}
+              <div class="alert">{{ message }}</div>
+          {% endfor %}
+  
+          {% block content %} {% endblock %}
+      </div>
+  </body>
+    </div>
+  </div>
+  <footer>
+  <div class="footer-links">
+    <a href="{{ url_for('index') }}">Home</a>
+    <a href="{{ url_for('getSong') }}">Songs</a>
+    <a href="{{ url_for('getArtist') }}">Artists</a>
+    <a href="{{ url_for('getAlbum') }}">Albums</a>
+    <a href="{{ url_for('getPlaylist') }}">PlayLists</a>
+    <a href="{{ url_for('getGenre') }}">Genres</a>
+  </div>
+  <div class="footer-info">
+    <p>&copy; 2023 FlaskApp. All Rights Reserved.</p>
+  </div>
+  </footer>
+</html>

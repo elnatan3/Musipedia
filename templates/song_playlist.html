@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  {% if playlists %}
+    <h1>Playlists</h1>
+    {% if song %}
+      <h2 style="margin-left: 100px; margin-right: 100px;">Playlists that '{{ song.Title }}'' is in:</h2>
+    {% endif %}
+    <div class="card-container">
+      {% for playlist in playlists %}
+        <div class="card">
+          <div class="card-title">{{ playlist.Title }}</div>
+          <div class="card-content">{{ playlist.Description }}</div>
+          {% if song %}
+            <div class="card-content-date">
+              <p style="color: green; font-weight: 600;">Date Added: </p>
+              <div>{{ playlist.DateAdded }}</div>
+            </div>
+            <div class="card-action">
+              <a href="{{ url_for('remove_song_from_playlist', playlist_id=playlist.PlaylistID, song_id=song.SongID)}}">Remove from playlist</a>
+            </div>
+          {% else %}
+            <div class="card-action">
+              <a href="{{ url_for('add_song_to_playlist', playlist_id=playlist.PlaylistID) }}">View songs</a>
+            </div>
+          {% endif %}
+        </div>
+      {% endfor %}
+    </div>
+  {% else %}
+  <div class="no-playlists">
+    <p id="playlist-info">The song is not in any playlist at this time. Add it to a playlist if you wish by going back to songs or go back to just enjoy more of Musipedia (●'◡'●) </p>
+    <a href="{{ url_for('getSong', song_id=song['SongID']) }}" class="back-link">Click here to go back</a>
+  </div>
+{% endif %}
+
+<script>
+  const playlistInfo = document.getElementById('playlist-info');
+  let animationTimeout;
+
+  function stopAnimation() {
+    clearInterval(animationInterval);
+    clearTimeout(animationTimeout);
+    playlistInfo.style.animation = 'none';
+  }
+
+  animationTimeout = setTimeout(stopAnimation, 5000);
+
+  playlistInfo.addEventListener('animationend', () => {
+    animationTimeout = setTimeout(stopAnimation, 5000);
+  });
+
+</script>
+
+{% endblock %}

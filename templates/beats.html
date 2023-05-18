@@ -1,0 +1,134 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <h1>Beats</h1>
+  <div class="beats-grid">
+    {% for beat in beats %}
+      <div class="beats-card">
+        <div class="beats-card-inner">
+          <div class="beats-card-front">
+            <h2 class="beats-card-title">{{ beat['Title'] }}</h2>
+            <p class="beats-card-text">{{ beat['Description'] }}</p>
+          </div>
+          <div class="beats-card-back">
+            <h2 style= "font-size: 26px;">Play</h2>
+            <p class="beats-card-text">Duration: {{ beat['Duration'] }}</p>
+            <button style = "font-size: 30px;" onclick="openPopup('{{ beat['Title'] }}', '{{ url_for('static', filename='music/' + beat['Title']) + '.mp3'}}')">▷</button>
+            <p style= "font-size: 10px; margin-top: 50px;">Music provided by NoCopyrightSounds
+Free Download/Stream: http://NCS.io/</p>
+          </div>
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+
+  <script>
+  // Find all the beats cards and add touch event listeners to each of them
+  const beatsCards = document.querySelectorAll('.beats-card');
+  beatsCards.forEach((card) => {
+    card.addEventListener('touchstart', function() {
+      // Toggle the 'flipped' class on the card when it's touched
+      this.querySelector('.beats-card-inner').classList.toggle('flipped');
+    });
+    card.addEventListener('touchend', function() {
+      // Toggle the 'flipped' class on the card when touch ends
+      this.querySelector('.beats-card-inner').classList.toggle('flipped');
+    });
+    card.addEventListener('touchcancel', function() {
+      // Toggle the 'flipped' class on the card when touch is cancelled
+      this.querySelector('.beats-card-inner').classList.toggle('flipped');
+    });
+  });
+</script>
+
+<script>
+    let popupMinimized = false;
+    
+    function openPopup(title, url) {
+      // close any previous popups
+      const previousPopup = document.querySelector('.popup');
+      if (previousPopup) {
+        previousPopup.remove();
+      }
+      
+      const popup = document.createElement('div');
+      popup.classList.add('popup');
+    
+      const audio = document.createElement('audio');
+      audio.src = url;
+      audio.controls = true;
+      audio.autoplay = true;
+      audio.preload = "metadata";
+    
+      const beatTitle = document.createElement('h2');
+      beatTitle.textContent = title;
+    
+      const toggleButton = document.createElement('button');
+      toggleButton.classList.add('toggle-button');
+      toggleButton.textContent = '-';
+      toggleButton.addEventListener('click', () => {
+        popupMinimized = !popupMinimized;
+        if (popupMinimized) {
+          toggleButton.textContent = '+';
+          popup.classList.add('minimized');
+          beatTitle.style.display = 'none';
+          closeButton.style.bottom = '70px';
+          popup.style.transform = 'translate(0, 0)';
+          popup.style.top = 'auto';
+          popup.style.left = 'auto';
+          popup.style.bottom = '20px';
+          popup.style.right = '20px';
+          popup.style.zIndex = '1';
+        } else {
+          toggleButton.textContent = '-';
+          popup.classList.remove('minimized');
+          beatTitle.style.display = 'block';
+          closeButton.style.bottom = '138px';
+          popup.style.transform = 'translate(-50%, -50%)';
+          popup.style.top = '50%';
+          popup.style.left = '50%';
+          popup.style.bottom = 'auto';
+          popup.style.right = 'auto';
+        }
+      });
+    
+      const buttonsContainer = document.createElement('div');
+      buttonsContainer.classList.add('buttons-container');
+      buttonsContainer.appendChild(toggleButton);
+    
+      popup.appendChild(beatTitle);
+      popup.appendChild(buttonsContainer);
+      popup.appendChild(audio);
+      document.body.appendChild(popup);
+    
+      const closeButton = document.createElement('button');
+      closeButton.textContent = 'X'; // change text content to X
+      closeButton.style.position = 'absolute'; // set position to absolute
+      closeButton.style.right = '10px'; // adjust right property
+      closeButton.style.bottom = '138px';
+      closeButton.addEventListener('click', () => popup.remove());
+    
+      popup.appendChild(beatTitle);
+      popup.appendChild(audio);
+      popup.appendChild(closeButton);
+      document.body.appendChild(popup);
+    
+      // add animation effect when the song is playing
+      audio.addEventListener('play', () => {
+        popup.classList.add('playing');
+      });
+      
+      // remove animation effect when the song is paused or ended
+      audio.addEventListener('pause', () => {
+        popup.classList.remove('playing');
+      });
+      audio.addEventListener('ended', () => {
+        popup.classList.remove('playing');
+      });
+    }
+
+
+  </script>
+
+
+{% endblock %}

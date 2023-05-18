@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <h1>Add "{{ song['Title'] }}" to Playlist:</h1>
+  {% if playlists %}
+    <ul class="playlist-selector">
+  {% for playlist in playlists %}
+       {% if song_id not in playlist['SongIDs'] %}
+        <li>
+          <a href="{{ url_for('add_song_to_playlist_action', playlist_id=playlist['PlaylistID'], song_id=song_id) }}" class="playlist-link">{{ playlist['Title'] }}</a>
+        </li>
+      {% endif %}  
+  {% endfor %}
+  </ul>
+  {% else %}
+    <p style="font-size: 24px;">You have not created any new playlists. Click below to go to playlists and create new playlist.</p>
+    <div class= "click-here-to-add"><a href="{{ url_for('getPlaylist') }}">Click here</a></div>
+  {% endif %}
+
+{% endblock %}
+

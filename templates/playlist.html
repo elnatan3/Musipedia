@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+
+{% block title %}All Playlists{% endblock %}
+
+{% block content %}
+  <h1>All Playlists</h1>
+  <a href="{{ url_for('create_playlist') }}" id="create-playlist-button">Create Playlist</a>
+  <div class="playlist-container">
+    {% for playlist in playlists %}
+      <div class="playlist-card">
+        <div class="playlist-attribute">
+          <label>Title:</label>
+          <div class="playlist-title">{{ playlist['Title'] }}</div>
+        </div>
+        <div class="playlist-attribute">
+          <label>Description:</label>
+          <div class="playlist-description">{{ playlist['Description'] }}</div>
+        </div>
+        <div class="playlist-attribute">
+          <label>Total Duration:</label>
+          <div class="playlist-duration">{{ playlist['TotalDuration'] }}</div>
+        </div>
+        <div class="playlist-attribute">
+          <label>Total Songs:</label>
+          <div class="playlist-duration">{{ playlist['TotalSongs'] }}</div>
+        </div>
+        <div class="playlist-action">
+          {% if playlist['TotalSongs'] > 0 %}
+            <a href="{{ url_for('get_playlist_songs', id=playlist['PlaylistID']) }}" class="open-button">Open</a>
+          {% endif %}
+          <a href="{{ url_for('edit_playlist', id=playlist['PlaylistID']) }}">Edit</a>
+        </div>
+        <div class="playlist-share">
+          <button class="share-button" data-url="{{ url_for('getPlaylist', id=playlist['PlaylistID'], _external=True) }}">Share</button>
+          <div class="share-menu">
+            <a href="https://mail.google.com/mail/?view=cm&fs=1&tf=1&to=&su={{ playlist['Title'] }}&body={{ url_for('get_playlist_songs', id=playlist['PlaylistID'], _external=True) }}" title="Email" class="gmail">📩</a>
+            <a href="sms:&body={{ url_for('get_playlist_songs', id=playlist['PlaylistID'], _external=True) }}" title="iMessages" class="imessage">✉</a>
+          </div>
+          </div>
+        </div>
+    {% endfor %}
+    </div>
+
+  <script>
+    // Show/hide the share menu when the share button is clicked
+    const shareButtons = document.querySelectorAll(".share-button");
+
+shareButtons.forEach((button) => {
+  button.addEventListener("click", (event) => {
+    const shareMenu = event.target.nextElementSibling;
+    shareMenu.classList.toggle("show-share-menu");
+  });
+}); </script>
+{% endblock %}

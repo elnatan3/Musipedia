@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <div class="album-container">
+    <h1>{{ album.Title }} ({{ album.Year }})</h1>
+    <ul class="song-list">
+      {% for song in songs %}
+        <li class="song-item">
+          <div class="song-title">{{ song.Title }}</div>
+          <div class="song-artist">By {{ album.Name }}</div>
+        </li>
+      {% endfor %}
+    </ul>
+  </div>
+
+
+{% endblock %}

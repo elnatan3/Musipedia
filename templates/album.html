@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <h1 style="margin-top: 90px;">Albums</h1>
+  <form style>
+    <input type="text" id="search" placeholder="Search albums...">
+    <button type="button" id="search-btn">Search</button>
+  </form>
+  <ul id="album-list">
+    {% for album in albums %}
+      <li class="album-item">
+        <h2>{{ album.Title }} ({{ album.Year }})</h2>
+        <div style="display: flex; justify-content: center;">
+      <form method="get" action="{{ url_for('getAlbumSongs') }}">
+        <input type="hidden" name="album_id" value="{{ album.AlbumID }}">
+        <button class="view_songs" type="submit">View Songs</button>
+      </form>
+    </div>
+      </li>
+    {% endfor %}
+  </ul>
+
+  <script>
+    // Get the search input, search button, and album list
+    const search = document.getElementById('search');
+    const searchBtn = document.getElementById('search-btn');
+    const albumList = document.getElementById('album-list');
+    const albumItems = albumList.querySelectorAll('.album-item');
+
+    // Add event listener to search button
+    searchBtn.addEventListener('click', () => {
+      filterAlbums();
+    });
+
+    // Add event listener to search input
+    search.addEventListener('input', () => {
+      filterAlbums();
+    });
+
+    // Function to filter albums based on search term
+    function filterAlbums() {
+      // Get search value and convert to lowercase
+      const searchTerm = search.value.toLowerCase();
+
+      // Loop through album items and hide/show albums based on search term
+      albumItems.forEach(item => {
+        const albumTitle = item.querySelector('h2').textContent.toLowerCase();
+        if (albumTitle.startsWith(searchTerm)) {
+          item.style.display = 'block';
+        } else {
+          item.style.display = 'none';
+        }
+      });
+    }
+  </script>
+{% endblock %}
